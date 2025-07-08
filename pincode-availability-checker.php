@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/includes/render.php';
 require_once __DIR__ . '/includes/class-settings-page.php';
+require_once __DIR__ . '/includes/api.php';
 
 new PC_Settings_Page();
 
@@ -39,3 +40,6 @@ function create_block_pincode_availability_checker_block_init() {
 	}
 }
 add_action( 'init', 'create_block_pincode_availability_checker_block_init' );
+
+add_action('rest_api_init', 'pc_register_rest_api');
+
