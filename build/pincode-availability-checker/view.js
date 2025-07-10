@@ -24,25 +24,78 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
  */
 
-/* eslint-disable no-console */
-console.log('Hello World! (from create-block-pincode-availability-checker block)');
+/** 
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.pincode-checker-block').forEach(block => {
+        const input = block.querySelector('.pincode-input');
+        const button = block.querySelector('.pincode-submit');
+        const message = block.querySelector('.pincode-message');
+
+        // Get cookie
+        const saved = getCookie('user_pincode');
+        if (saved) input.value = saved;
+
+        button.addEventListener('click', async () => {
+            const pincode = input.value.trim();
+            if (!pincode) {
+                message.textContent = 'Please enter a pincode.';
+                return;
+            }
+            setCookie('user_pincode', pincode, 30);
+
+            const resp = await fetch('/wp-json/pincode-checker/v1/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pincode })
+            });
+            const result = await resp.json();
+            message.textContent = result.message;
+        });
+    });
+
+    function getCookie(name) {
+        const nameEQ = name + '=';
+        const ca = document.cookie.split(';');
+        for (let c of ca) {
+            c = c.trim();
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
+        }
+        return null;
+    }
+
+    function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
+    }
+});
+
+*/
+
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.pincode-checker-block').forEach(block => {
     const input = block.querySelector('.pincode-input');
     const button = block.querySelector('.pincode-submit');
     const message = block.querySelector('.pincode-message');
 
-    // Get cookie
+    // Get saved pincode
     const saved = getCookie('user_pincode');
-    if (saved) input.value = saved;
-    button.addEventListener('click', async () => {
+    if (saved) {
+      input.value = saved;
+      checkPincode(saved); // Automatically check it
+    }
+    button.addEventListener('click', () => {
       const pincode = input.value.trim();
       if (!pincode) {
         message.textContent = 'Please enter a pincode.';
         return;
       }
       setCookie('user_pincode', pincode, 30);
-      const resp = await fetch('/wp-json/pincode-checker/v1/check', {
+      checkPincode(pincode);
+    });
+    function checkPincode(pincode) {
+      message.textContent = 'Checking availability...';
+      fetch('/wp-json/pincode-checker/v1/check', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -50,10 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({
           pincode
         })
+      }).then(response => response.json()).then(result => {
+        message.textContent = result.message;
+        message.style.color = result.available ? 'green' : 'red';
+      }).catch(() => {
+        message.textContent = 'Error checking pincode.';
+        message.style.color = 'red';
       });
-      const result = await resp.json();
-      message.textContent = result.message;
-    });
+    }
   });
   function getCookie(name) {
     const nameEQ = name + '=';
@@ -70,8 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
   }
 });
-
-/* eslint-enable no-console */
 /******/ })()
 ;
 //# sourceMappingURL=view.js.map

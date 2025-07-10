@@ -27,26 +27,40 @@ document.addEventListener('DOMContentLoaded', () => {
         const button = block.querySelector('.pincode-submit');
         const message = block.querySelector('.pincode-message');
 
-        // Get cookie
+        // Get saved pincode
         const saved = getCookie('user_pincode');
-        if (saved) input.value = saved;
+        if (saved) {
+            input.value = saved;
+            checkPincode(saved); // Automatically check it
+        }
 
-        button.addEventListener('click', async () => {
+        button.addEventListener('click', () => {
             const pincode = input.value.trim();
             if (!pincode) {
                 message.textContent = 'Please enter a pincode.';
                 return;
             }
             setCookie('user_pincode', pincode, 30);
+            checkPincode(pincode);
+        });
 
-            const resp = await fetch('/wp-json/pincode-checker/v1/check', {
+        function checkPincode(pincode) {
+            message.textContent = 'Checking availability...';
+            fetch('/wp-json/pincode-checker/v1/check', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ pincode })
-            });
-            const result = await resp.json();
-            message.textContent = result.message;
-        });
+            })
+                .then(response => response.json())
+                .then(result => {
+                    message.textContent = result.message;
+                    message.style.color = result.available ? 'green' : 'red';
+                })
+                .catch(() => {
+                    message.textContent = 'Error checking pincode.';
+                    message.style.color = 'red';
+                });
+        }
     });
 
     function getCookie(name) {
