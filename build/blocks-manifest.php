@@ -14,7 +14,19 @@ return array(
 			
 		),
 		'supports' => array(
-			'html' => false
+			'html' => false,
+			'color' => array(
+				'background' => true,
+				'text' => true
+			),
+			'spacing' => array(
+				'margin' => true,
+				'padding' => true
+			),
+			'typography' => array(
+				'fontSize' => true
+			),
+			'border' => true
 		),
 		'textdomain' => 'pincode-availability-checker',
 		'editorScript' => 'file:./index.js',
