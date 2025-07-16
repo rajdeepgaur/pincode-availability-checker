@@ -13,6 +13,3 @@ function pc_render_block($attributes, $content, $block) {
     <?php
     return ob_get_clean();
 }
-
-
-

@@ -1,55 +1,74 @@
-=== Pincode Availability Checker ===
-Contributors:      The WordPress Contributors
-Tags:              block
-Tested up to:      6.7
-Stable tag:        0.1.0
-License:           GPL-2.0-or-later
-License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+# 📦 Pincode Availability Checker – WordPress Gutenberg Block Plugin
 
-Example block scaffolded with Create Block tool.
+**Pincode Availability Checker** is a lightweight, dynamic Gutenberg block plugin that allows site visitors to check if their pincode is serviceable (i.e., eligible for delivery) based on a list configured by the site admin.
 
-== Description ==
+Visitors can input their pincode, and the plugin will remember it for up to a month using cookies. On future visits, the block will automatically pre-fill and re-check the delivery status — improving UX and reducing friction.
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+---
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+## ✨ Features
 
-== Installation ==
+- ✅ Gutenberg block to collect and check user pincode
+- 🧠 Auto-prefills saved pincode from browser cookies
+- 🕒 Cookie remembered for 30 days
+- ⚙️ Admin interface to manage deliverable pincodes (one per line)
+- 📦 Dynamic block using `render.php` (server-side rendering)
 
-This section describes how to install the plugin and get it working.
+---
 
-e.g.
+## 🛠 How It Works
 
-1. Upload the plugin files to the `/wp-content/plugins/pincode-availability-checker` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
+1. Add the **Pincode Availability Checker block** to any post or page via the block editor.
+2. Admins can configure the list of valid pincodes under:
+   **Settings → Pincode Settings**
+3. Users can:
+   - Enter their pincode
+   - Get instant feedback on delivery availability
+   - Have their pincode saved in the browser for next time
+4. On page load, if a cookie is present, the block auto-checks without user interaction.
 
+---
 
-== Frequently Asked Questions ==
+## 🔧 Admin Setup
 
-= A question that someone might have =
+1. Navigate to **Settings → Pincode Settings**.
+2. Enter one valid pincode **per line**.
+3. Save changes.
 
-An answer to that question.
+---
 
-= What about foo bar? =
+## 📦 Block Styling
 
-Answer to foo bar dilemma.
+The block supports basic Gutenberg styling:
 
-== Screenshots ==
+- Text and background colors
+- Padding and margin spacing
+- Typography (via block support)
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+All styles can be applied via the block sidebar.
 
-== Changelog ==
+---
 
-= 0.1.0 =
-* Release
+## 🚀 Installation
 
-== Arbitrary section ==
+1. Upload the plugin folder to `/wp-content/plugins/pincode-checker/`
+2. Activate the plugin via **Plugins → Installed Plugins**
+3. Use the block editor to insert the **Pincode Checker** block.
+4. Configure pincodes via **Settings → Pincode Settings**
 
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+---
+
+## 📁 File Structure
+
+```text
+pincode-availability-checker/
+├── build/                   → Compiled block assets (JS/CSS)
+├── includes/
+│   ├── api.php              → REST API endpoint for checking pincodes
+│   ├── class-settings-page.php → Admin settings page
+│   └── render.php           → Block rendering callback
+├── src/                     → Source files (edit.js, index.js, etc.)
+├── view.js              → Frontend logic (cookies, fetch, auto-check)
+├── block.json               → Block registration metadata
+├── pincode-availability-checker.php      → Main plugin file
+└── readme.md
