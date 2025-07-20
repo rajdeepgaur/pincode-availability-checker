@@ -51,7 +51,7 @@ All styles can be applied via the block sidebar.
 
 ## 🚀 Installation
 
-1. Upload the plugin folder to `/wp-content/plugins/pincode-checker/`
+1. Upload the plugin folder to `/wp-content/plugins/`
 2. Activate the plugin via **Plugins → Installed Plugins**
 3. Use the block editor to insert the **Pincode Checker** block.
 4. Configure pincodes via **Settings → Pincode Settings**
