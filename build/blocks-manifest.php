@@ -8,7 +8,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Pincode Availability Checker',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'location-alt',
 		'description' => 'Example block scaffolded with Create Block tool.',
 		'example' => array(
 			
